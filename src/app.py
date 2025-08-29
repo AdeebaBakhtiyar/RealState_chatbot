@@ -20,7 +20,7 @@ property_options = properties_df.apply(
     lambda row: f"{row['property_name']} - {row['listing_id']}", axis=1
 ).tolist()
 
-# You can also add an initial blank option
+# add an initial blank option
 property_options.insert(0, "Select a property (optional)")
 
 # Create a dictionary to easily get the listing_id from the selected string
@@ -97,7 +97,7 @@ def format_property_details(prop):
 def get_chatbot_response(prompt):
     user_input_lower = prompt.lower()
 
-     # Add conversational intent before other checks
+     # Add conversational intent 
     if any(word in user_input_lower for word in ["hello", "hi", "hey"]):
         return "Hello there! How can I help you today?", None
     
@@ -157,7 +157,6 @@ def get_chatbot_response(prompt):
 
 # --- Streamlit UI Loop ---
 
-
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -167,14 +166,12 @@ if prompt := st.chat_input("Ask about a property or book a visit..."):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-     # --- Update the call to get_chatbot_response ---
     response_text, property_id = get_chatbot_response(prompt)
 
     if response_text:
         st.session_state.messages.append({"role": "assistant", "content": response_text, "property_id": property_id})
         with st.chat_message("assistant"):
             st.markdown(response_text)
-            # --- Add the "Book a Visit" button ---
             if property_id:
                 if st.button(f"Book a visit for {property_id}"):
                     st.session_state.show_booking_form = True
@@ -182,15 +179,13 @@ if prompt := st.chat_input("Ask about a property or book a visit..."):
                     st.rerun()
 
 
-# --- Update the booking form to use the pre-filled value ---
+# booking form to use the pre-filled value ---
 if st.session_state.show_booking_form:
     st.subheader("Book a Visit")
-    # Check if a property ID was pre-filled and use it
     prefilled_prop_id = st.session_state.get('prefill_property_id', '')
     with st.form("booking_form"):
         name = st.text_input("Full Name", key="booking_name")
         phone = st.text_input("Phone Number", key="booking_phone")
-        # --- Replace the text input with a selectbox ---
         selected_property_option = st.selectbox(
             "Which property?",
             options=property_options,
@@ -199,11 +194,11 @@ if st.session_state.show_booking_form:
     
         submitted = st.form_submit_button("Submit Booking")
         if submitted:
-            # ... your existing validation logic from improvement 1
             if not name or not phone:
                 st.error("Please provide your name and phone number.")
             else:
-            # Get the actual listing_id from the selected option
+
+            # listing_id from the selected option
                 property_query = ""
                 if selected_property_option != "Select a property (optional)":
                     property_query = property_map.get(selected_property_option, "")
