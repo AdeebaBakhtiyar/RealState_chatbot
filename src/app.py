@@ -97,6 +97,13 @@ def format_property_details(prop):
 def get_chatbot_response(prompt):
     user_input_lower = prompt.lower()
 
+     # Add conversational intent before other checks
+    if any(word in user_input_lower for word in ["hello", "hi", "hey"]):
+        return "Hello there! How can I help you today?", None
+    
+    if any(word in user_input_lower for word in ["thank", "thanks", "thankyou"]):
+        return "You're welcome! ThankYou for visiting", None
+
      # Check if the user is asking to see properties for sale
     if any(keyword in user_input_lower for keyword in ["buy", "purchase", "looking for a flat", "want to buy a flat", "show me flats", "want to visit flat"]):
         
@@ -173,6 +180,7 @@ if prompt := st.chat_input("Ask about a property or book a visit..."):
                     st.session_state.show_booking_form = True
                     st.session_state.prefill_property_id = property_id
                     st.rerun()
+
 
 # --- Update the booking form to use the pre-filled value ---
 if st.session_state.show_booking_form:
