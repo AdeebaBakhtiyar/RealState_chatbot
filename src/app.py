@@ -6,8 +6,8 @@ from datetime import datetime
 from helpers import load_properties, get_property_by_id, get_property_by_name, polish_with_llm
 
 # --- Configuration & Data Loading ---
-st.set_page_config(page_title="Zorever Real Estate Chatbot", page_icon="🏡")
-st.title("Zorever Real Estate Chatbot 🏡")
+st.set_page_config(page_title="Real Estate Chatbot")
+st.title("Real Estate Chatbot")
 
 # Use st.cache_data for efficient data loading
 @st.cache_data
